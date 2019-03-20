@@ -21,6 +21,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,11 +129,20 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
 
         int count = 0;
         for (String icon_name : GlobalAppAccess.icon_name) {
+            LinearLayout icon_container = new LinearLayout(getActivity());
             ImageView img = new ImageView(getActivity());
-            LinearLayout.LayoutParams lP =
+
+            LinearLayout.LayoutParams lP_container =
                     new LinearLayout.LayoutParams(MydApplication.getInstance().getPixelValue(80),
                             MydApplication.getInstance().getPixelValue(80));
-            lP.setMargins(MydApplication.getInstance().getPixelValue(10), 0, 0, MydApplication.getInstance().getPixelValue(5));
+
+            LinearLayout.LayoutParams lP =
+                    new LinearLayout.LayoutParams(MydApplication.getInstance().getPixelValue(70),
+                            MydApplication.getInstance().getPixelValue(70));
+
+           // lP_container.setMargins(MydApplication.getInstance().getPixelValue(10), 0, 0, MydApplication.getInstance().getPixelValue(5));
+            icon_container.setGravity(Gravity.CENTER);
+
             img.setTag(count);
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -144,14 +154,23 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
 
                     tv_icon_details.setText(GlobalAppAccess.icon_details[Integer.parseInt(view.getTag().toString())]);
 
-                    view.setBackgroundColor(getActivity().getResources().getColor(R.color.blue_for_keyboard_blur));
+                   // view.setBackgroundColor(getActivity().getResources().getColor(R.color.blue_for_keyboard_blur));
+                    LinearLayout linearLayout = (LinearLayout) view.getParent();
+                    linearLayout.setBackgroundColor(getActivity().getResources().getColor(R.color.blue_for_keyboard_blur));
                 }
             });
+
+
+            icon_container.setLayoutParams(lP_container);
+
             img.setLayoutParams(lP);
             img.setImageResource(getResources().getIdentifier(icon_name, "drawable", getActivity().getPackageName()));
 
             icons.add(img);
-            ll_icon_container.addView(img);
+
+            icon_container.addView(img);
+            ll_icon_container.addView(icon_container);
+
 
             count++;
         }
@@ -160,7 +179,9 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
 
     private void clearBackgroundOfAllIcon() {
         for (ImageView img : icons) {
-            img.setBackgroundColor(getActivity().getResources().getColor(R.color.white));
+            //img.setBackgroundColor(getActivity().getResources().getColor(R.color.white));
+            LinearLayout linearLayout = (LinearLayout) img.getParent();
+            linearLayout.setBackgroundColor(getActivity().getResources().getColor(R.color.white));
         }
     }
 
@@ -237,7 +258,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
                             MarkPosition markPosition = snapshot.getValue(MarkPosition.class);
                             //Log.d("DEBUG", String.valueOf(snapshot.getKey()));
 
-                            addMarkerOnMap(markPosition.getLat(),markPosition.getLang(),markPosition.getUserUID(),markPosition.markerDetails,markPosition.getMarkerIconDrawableName(),snapshot.getKey());
+                            addMarkerOnMap(markPosition.getLat(), markPosition.getLang(), markPosition.getUserUID(), markPosition.markerDetails, markPosition.getMarkerIconDrawableName(), snapshot.getKey());
 
                         }
 
@@ -432,7 +453,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
             uid = "0";
         }
 
-        MarkPosition markPosition = new MarkPosition(uid, location.getLatitude(), location.getLongitude(), GlobalAppAccess.icon_details[(int) selectedIcon.getTag()],GlobalAppAccess.icon_name[(int) selectedIcon.getTag()]);
+        MarkPosition markPosition = new MarkPosition(uid, location.getLatitude(), location.getLongitude(), GlobalAppAccess.icon_details[(int) selectedIcon.getTag()], GlobalAppAccess.icon_name[(int) selectedIcon.getTag()]);
 
         // mFirebaseInstance.getReference("mark_position").setValue(markPosition);
 
@@ -450,7 +471,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                 //Log.d("DEBUG", "Value was set. Error = " + databaseError);
                 Toast.makeText(getActivity(), "Successfully added", Toast.LENGTH_SHORT).show();
-                addMarkerOnMap(location.getLatitude(),location.getLongitude(),uid,GlobalAppAccess.icon_details[(int) selectedIcon.getTag()],GlobalAppAccess.icon_name[(int) selectedIcon.getTag()],markID);
+                addMarkerOnMap(location.getLatitude(), location.getLongitude(), uid, GlobalAppAccess.icon_details[(int) selectedIcon.getTag()], GlobalAppAccess.icon_name[(int) selectedIcon.getTag()], markID);
             }
         });
 
@@ -470,9 +491,9 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
     }
 
 
-    private void addMarkerOnMap(double lat, double lang, String UID,String markerDetails, String markerIdDrawableName, String markId) {
+    private void addMarkerOnMap(double lat, double lang, String UID, String markerDetails, String markerIdDrawableName, String markId) {
 
-        InfoWindowData infoWindowData = new InfoWindowData(markId,markerIdDrawableName,markerDetails,UID);
+        InfoWindowData infoWindowData = new InfoWindowData(markId, markerIdDrawableName, markerDetails, UID);
 
 
         // adding a marker on map with image from  drawable
@@ -502,22 +523,21 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
     }
 
 
-
     @Override
     public void onInfoWindowClick(Marker marker) {
         final InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
 
+        showDialogForDeleteLocation(marker, infoWindowData);
+        /*FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (infoWindowData.getUID().equalsIgnoreCase("0") || user == null || !infoWindowData.getUID().equals(user.getUid())) {
 
-       if(infoWindowData.getUID().equalsIgnoreCase("0") ||user == null ||!infoWindowData.getUID().equals(user.getUid())){
+        } else {
 
-        }else{
-                showDialogForDeleteLocation(marker,infoWindowData);
-        }
+        }*/
     }
 
-    private void showDialogForDeleteLocation(final Marker marker, final InfoWindowData infoWindowData){
+    private void showDialogForDeleteLocation(final Marker marker, final InfoWindowData infoWindowData) {
 
         final Dialog dialog_start = new Dialog(getActivity(),
                 android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
@@ -559,17 +579,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
     private ProgressDialog progressDialog;
 
     public void showProgressDialog(String message, boolean isIntermidiate, boolean isCancelable) {
@@ -594,7 +603,6 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
             progressDialog.dismiss();
         }
     }
-
 
 
 }

@@ -81,7 +81,7 @@ public class GlobalAppAccess {
             "printing: it's so difficult to find a printer sometimes.",
             "donation boxes: for clothes or other",
             "no sidewalk: better to avoid if walking",
-            "accident prone: bad lights, sidewalk or sharp corner, somthing makes this place prone to accidents.",
+            "accident prone: bad lights, sidewalk or sharp corner, something makes this place prone to accidents.",
             "shoe fix: shoe emergencies are real.",
             "dark streets: bad things happen in the dark",
             "bathroom: no need to explain",

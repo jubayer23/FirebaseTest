@@ -3,7 +3,6 @@ package com.creative.firebasetest.CustomClass;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,9 +11,6 @@ import com.creative.firebasetest.R;
 import com.creative.firebasetest.model.InfoWindowData;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class InfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -48,13 +44,13 @@ public class InfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         img_icon.setImageResource(context.getResources().getIdentifier(infoWindowData.getIconName(), "drawable", context.getPackageName()));
         tv_icon_details.setText(infoWindowData.getIconDetails());
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if(infoWindowData.getUID().equalsIgnoreCase("0") || user == null || !infoWindowData.getUID().equals(user.getUid())){
-            ll_alert_message_container.setVisibility(View.GONE);
-        }else{
+        //if(infoWindowData.getUID().equalsIgnoreCase("0") || user == null || !infoWindowData.getUID().equals(user.getUid())){
+        //    ll_alert_message_container.setVisibility(View.GONE);
+        //}else{
             ll_alert_message_container.setVisibility(View.VISIBLE);
-        }
+        //}
 
 
        /* btn_delete.setOnClickListener(new View.OnClickListener() {

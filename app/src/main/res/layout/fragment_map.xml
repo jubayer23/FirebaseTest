@@ -52,14 +52,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/horizontal_sv"
-        android:background="@color/gray_light">
+        android:background="@color/colorPrimary">
 
         <TextView
             android:id="@+id/tv_icon_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="3dp"
-            android:text="No description found"
+            android:text="Please select an icon and share"
             android:textColor="@color/white"
             android:textSize="15sp" />
     </LinearLayout>
@@ -79,6 +79,8 @@
         android:layout_margin="8dp"
         android:src="@drawable/ic_add_white"
         app:elevation="6dp"
-        app:pressedTranslationZ="12dp" />
+        app:pressedTranslationZ="12dp"
+        app:backgroundTint="@color/red"
+        app:fabSize="normal" />
 
 </RelativeLayout>

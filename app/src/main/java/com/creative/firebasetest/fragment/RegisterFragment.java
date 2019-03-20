@@ -119,7 +119,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(getActivity(), "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
@@ -157,7 +157,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                         dismissProgressDialog();
 
                         if (task.isSuccessful()) {
-
+                            Toast.makeText(getActivity(), "Signup Successful.", Toast.LENGTH_SHORT).show();
 
                             ((MainActivity)getActivity()).processLogin();
                         }else{
